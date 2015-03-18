@@ -1,0 +1,10 @@
+{
+    'http_accept_connect_on_hostname':'',
+    'http_port':'',
+    'irc_server':'',
+    'irc_port':'',
+    'check_online_nickname':'',
+    'user_irc_nickname':'',
+    'user_name_on_front':'',
+    'user_status_on_front':''
+}
