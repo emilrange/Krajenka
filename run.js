@@ -8,7 +8,8 @@ fs.readFile("config",{encoding: 'utf-8'},function(err,data){ config = eval("("+d
 var img01 = fs.readFileSync("img/img01.png");
 var img02 = fs.readFileSync("img/img02.png");
 var imgload = fs.readFileSync("img/load.gif");
-
+var standardHtml = fs.readFileSync("html/standard.html");
+ 
 
 
 
@@ -19,11 +20,7 @@ var online = null;
 
 var getStartHtml = function()
 {
-    var jq = '<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>';
-    var ajax = 'setInterval(function(){$.ajax({url:"/status"}).done(function(data){'+
-    'var j = eval("("+data+")");'+'if(j.s==1) { $("#status").html("online"); $("#user_img").attr("src","img01.png");} '+'if(j.s==-1) { $("#status").html("offline"); $("#user_img").attr("src","img02.png"); } '+
-    '})},1000)';
-    return jq+'<img id="user_img" src="load.gif" alt="user_img"><b id="status">.</b><script>$(document).ready(function(){'+ajax+"});</script>";
+    return standardHtml;
 }
 
 var getStatus = function()

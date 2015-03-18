@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script>
+            setInterval(function(){$.ajax({url:"/status"}).done(function(data){
+                var j = eval("("+data+")");
+                if(j.s==1) { $("#status").html("online");
+                $("#user_img").attr("src","img01.png");}
+                if(j.s==-1) { $("#status").html("offline"); $("#user_img").attr("src","img02.png"); }
+            })},1000);
+        </script>
+
+        <style>
+            table.content{background: #fff; height:100%; width:100%}
+            .content td{vertical-align: center;}
+            .user{width:300px; border-bottom: 1px solid #bbb}
+            .online{background:#bbb; height:5px}
+            ul.chat{display: block; padding:0; margin:0;}
+            ul.chat li{display: block; padding:0; margin:0}
+            .me{color: #14b}
+            .you{color: #91a}
+        </style>
+
+        <table class="content">
+            <tr>
+                <td>
+                    <table class="user" style="margin: 0 auto 0 auto;">
+                        <tr>
+                            <td style="width:48px"><img id="user_img" src="load.gif"/></td>
+                            <td><b id="status">.</b><br/>NickName <i style="font-size:12px"> - status</i></td>
+                            <td style="width:24px"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
