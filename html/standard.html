@@ -11,6 +11,11 @@
                 $("#user_img").attr("src","img01.png");}
                 if(j.s==-1) { $("#status").html("offline"); $("#user_img").attr("src","img02.png"); }
             })},1000);
+
+            setInterval(function(){$.ajax({url:"/status_period"}).done(function(data){
+                var j = eval("("+data+")");
+                $("#data").html(data);
+            })},1000);
         </script>
 
         <style>
@@ -34,6 +39,11 @@
                             <td style="width:24px"></td>
                         </tr>
                     </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="data"></div>
                 </td>
             </tr>
         </table>

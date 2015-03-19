@@ -17,6 +17,7 @@ var standardHtml = fs.readFileSync("html/standard.html");
 
 
 var online = null;
+var onlineData = new Array();
 
 var getStartHtml = function()
 {
@@ -30,6 +31,12 @@ var getStatus = function()
     if(online===false) onlineStatus = -1;
     return "{s:"+onlineStatus+"}";
 }
+
+var getStatusPeriod = function()
+{
+    return JSON.stringify(onlineData);
+}
+
 
 setTimeout( function(){
 
@@ -54,6 +61,7 @@ http.createServer(function(req,res)
     if(url=="/img02.png") requestType=4;
     if(url=="/load.gif") requestType=5;
     if(url=="/img04.png") requestType=6;
+    if(url=="/status_period")requestType=7;
 
     console.log(url);
 
@@ -93,6 +101,14 @@ http.createServer(function(req,res)
         res.end(getStatus());
     }
 
+    if(requestType==7)
+    {
+        res.writeHead(200,{'Content-Type':'text/plain'});
+        res.end(getStatusPeriod());
+    }
+
+
+
 
 }).listen(config.http_port,config.http_accept_connect_on_hostname);
 
@@ -120,13 +136,14 @@ irc.on('data',function(data){
         if(parameters[1]=="303")
         {
             online = ( parameters[3] == ":"+config.user_irc_nickname );
+            onlineData.push(online ? 1 : -1);
         }
 
     }
 });
 irc.write("NICK "+config.check_online_nickname+"\r\n");
 irc.write("USER "+config.check_online_nickname+" 0 * :"+config.chech_online_nickname+"\r\n");
-setInterval(function(){ irc.write("ISON "+config.user_irc_nickname+"\r\n");},5000);
+setInterval(function(){ irc.write("ISON "+config.user_irc_nickname+"\r\n");},15000);
 }
 
 },2000);
