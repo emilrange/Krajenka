@@ -1,15 +1,35 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <title>Karjenka - chat with NickName</title>
         <meta charset="UTF-8"/>
+
+        <style>
+            *{font-family: sans-serif; font-size:14px}
+            table{ border-spacing: 0; borde-collapse: separate;}
+            td {padding:0}
+            #content{background: #fff; width:100%; height: 740px}
+            #content td{vertical-align: center;}
+            #user table{width:300px; border-bottom: 1px solid #bbb; margin: 0 auto 0 auto; }
+            #user table .message {font-size: 12px; font-style: italic;}
+            #user table .status {font-weight: bold;}
+            #online_history{height: 20px;}
+            #is_online .online{background: #888; height:6px; width:20px;}
+            #is_online .offline{background: #fff height: 6px; width:20px;}
+            #border td{ background: #888; height: 4px; width:20px;}
+            #functions {width:24px;}
+            #user_img {width:54px;}
+        </style>
+
+
     </head>
     <body>
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <script>
             setInterval(function(){$.ajax({url:"/status"}).done(function(data){
                 var j = eval("("+data+")");
-                if(j.s==1) { $("#status").html("online");
-                $("#user_img").attr("src","img01.png");}
-                if(j.s==-1) { $("#status").html("offline"); $("#user_img").attr("src","img02.png"); }
+                if(j.s==1) { $("#user").find(".status").html("online"); $("#user_img").find("img").attr("src","img01.png"); }
+                if(j.s==-1) { $("#user").find(".status").html("offline"); $("#user_img").find("img").attr("src","img02.png"); }
             })},1000);
 
             setInterval(function(){$.ajax({url:"/status_period"}).done(function(data){
@@ -24,52 +44,29 @@
                 }
 
                 $("#visit").html(viHtml);
-                $("#online").html(trHtml);
+                $("#is_online").html(trHtml);
                 $("#border").html(viHtml);
             })},1000);
         </script>
 
-        <style>
-            table.content{background: #fff; height:100%; width:100%}
-            .content td{vertical-align: center;}
-            .user{width:300px; border-bottom: 1px solid #bbb}
-            .online{background:#bbb; height:5px}
-            ul.chat{display: block; padding:0; margin:0;}
-            ul.chat li{display: block; padding:0; margin:0}
-            .me{color: #14b}
-            .you{color: #91a}
-            #online .online{background: #888; height:6px; width:20px;}
-            #online .offline{background: #fff height: 6px; width:20px;}
-            #border td{ background: #888; height: 4px; width:20px;}
-        </style>
-
-        <table class="content">
+        <table id="content">
             <tr>
-                <td>
-                    <table class="user" style="margin: 0 auto 0 auto;">
+                <td id="user">
+                    <table>
                         <tr>
-                            <td style="width:48px"><img id="user_img" src="load.gif"/></td>
-                            <td><b id="status">.</b><br/>NickName <i style="font-size:12px"> - status</i></td>
-                            <td style="width:24px"></td>
+                            <td id="user_img"><img src="load.gif" alt="user_img"/></td>
+                            <td><span class="status">.</span><br/>NickName <span class="message"> - status</span></td>
+                            <td id="functions"></td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
-                <td style="height: 20px;">
-                    <table cellspacing="0" cellpadding="0">
-                        <tr id="visit">
-                            <td>.</td>
-                        </tr>
-
-                        <tr id="online">
-                            <td>.</td>
-                        </tr>
-
-                        <tr id="border">
-                            <td>.</td>
-                        </tr>
-
+                <td id="online_history">
+                    <table>
+                        <tr id="visit"><td></td></tr>
+                        <tr id="is_online"><td></td></tr>
+                        <tr id="border"><td></td></tr>
                     </table>
                 </td>
             </tr>
