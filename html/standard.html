@@ -14,7 +14,18 @@
 
             setInterval(function(){$.ajax({url:"/status_period"}).done(function(data){
                 var j = eval("("+data+")");
-                $("#data").html(data);
+                var trHtml = "";
+                var viHtml = "";
+                for(var i=0; i<j.length; i++)
+                {
+                    var value= j[i];
+                    trHtml += '<td class="'+( value == 1 ? 'online' : 'offline')+'"></td>';
+                    viHtml += "<td></td>";
+                }
+
+                $("#visit").html(viHtml);
+                $("#online").html(trHtml);
+                $("#border").html(viHtml);
             })},1000);
         </script>
 
@@ -27,6 +38,9 @@
             ul.chat li{display: block; padding:0; margin:0}
             .me{color: #14b}
             .you{color: #91a}
+            #online .online{background: #888; height:6px; width:20px;}
+            #online .offline{background: #fff height: 6px; width:20px;}
+            #border td{ background: #888; height: 4px; width:20px;}
         </style>
 
         <table class="content">
@@ -42,8 +56,21 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <div id="data"></div>
+                <td style="height: 20px;">
+                    <table cellspacing="0" cellpadding="0">
+                        <tr id="visit">
+                            <td>.</td>
+                        </tr>
+
+                        <tr id="online">
+                            <td>.</td>
+                        </tr>
+
+                        <tr id="border">
+                            <td>.</td>
+                        </tr>
+
+                    </table>
                 </td>
             </tr>
         </table>
