@@ -1,6 +1,8 @@
 var http = require('http');
 var net = require('net');
 var fs = require('fs');
+var Irc = require('./module/Irc');
+
 
 var config = false;
 var loadConfig = false;
@@ -11,13 +13,11 @@ var imgload = fs.readFileSync("img/load.gif");
 var standardHtml = fs.readFileSync("html/standard.html");
  
 
-
+var irc = false;
 
 // This is script is far from working. Just starts with the standard code for the moment// 
 
 
-var online = null;
-var onlineData = new Array();
 
 var getStartHtml = function()
 {
@@ -27,14 +27,19 @@ var getStartHtml = function()
 var getStatus = function()
 {
     var onlineStatus = 0;
-    if(online===true) onlineStatus = 1;
-    if(online===false) onlineStatus = -1;
+    if(irc)
+    {
+        var online = irc.getData().online;
+        if(online===true) onlineStatus = 1;
+        if(online===false) onlineStatus = -1;
+    }
     return "{s:"+onlineStatus+"}";
 }
 
 var getStatusPeriod = function()
 {
-    return JSON.stringify(onlineData);
+    if(!irc) return "[]";
+    return JSON.stringify(irc.getData().onlineData);
 }
 
 
@@ -114,36 +119,7 @@ http.createServer(function(req,res)
 
 if(true)
 {
-irc = new net.Socket();
-irc.connect(config.irc_port,config.irc_server,function(){});
-irc.on('data',function(data){
-    var dataStr = ""+data;
-
-    var messages = dataStr.split("\r\n");
-    
-    for(var i=0; i<messages.length; i++)
-    {
-        var msg = messages[i];
-        var parameters = msg.split(" ");
-
-        console.log(msg);
-        if(msg.substr(0,4)=="PING")
-        {
-            var parameters = msg.split(" ");
-            var t = "PONG "+parameters[1]+"\r\n";
-            irc.write(t);
-        }
-        if(parameters[1]=="303")
-        {
-            online = ( parameters[3] == ":"+config.user_irc_nickname );
-            onlineData.push(online ? 1 : -1);
-        }
-
-    }
-});
-irc.write("NICK "+config.check_online_nickname+"\r\n");
-irc.write("USER "+config.check_online_nickname+" 0 * :"+config.chech_online_nickname+"\r\n");
-setInterval(function(){ irc.write("ISON "+config.user_irc_nickname+"\r\n");},15000);
+    irc = new Irc(config);
 }
 
 },2000);
