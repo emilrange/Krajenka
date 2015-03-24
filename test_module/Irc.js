@@ -1,6 +1,6 @@
 var net = require('net');
 
-module.exports = function Irc(config)
+module.exports = function Irc(core)
 {
     var onlineData = new Array();
     onlineData.push(1);

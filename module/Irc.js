@@ -1,7 +1,15 @@
 var net = require('net');
 
-module.exports = function Irc(config)
+module.exports = function Irc(core)
 {
+    var config = core.config;
+
+    if(config.irc_port=="") throw "invalid irc_port";
+    if(config.irc_server=="") throw "irc_server";
+    if(config.check_online_nickname=="") throw "invalid check_online_nickname";
+    if(config.user_irc_nickname=="") throw "invalid user_irc_nickname";
+ 
+
     var onlineData = new Array();
     var online = null;
     irc = new net.Socket();
@@ -10,6 +18,8 @@ module.exports = function Irc(config)
     {
         var dataStr = ""+data;
         var messages = dataStr.split("\r\n");
+
+        console.log(dataStr);
     
         for(var i=0; i<messages.length; i++)
         {
