@@ -5,8 +5,8 @@ var Irc = require('./module/Irc');
 
 
 var config = false;
-var loadConfig = false;
-fs.readFile("config",{encoding: 'utf-8'},function(err,data){ config = eval("("+data+")"); loadConfig = true;});
+
+config = eval("("+fs.readFileSync("config",{encoding: 'utf-8'})+")");
 var img01 = fs.readFileSync("img/img01.png");
 var img02 = fs.readFileSync("img/img02.png");
 var imgload = fs.readFileSync("img/load.gif");
@@ -14,10 +14,6 @@ var standardHtml = fs.readFileSync("html/standard.html");
  
 
 var irc = false;
-
-// This is script is far from working. Just starts with the standard code for the moment// 
-
-
 
 var getStartHtml = function()
 {
@@ -43,10 +39,7 @@ var getStatusPeriod = function()
 }
 
 
-setTimeout( function(){
-
 if(config===false) throw "config failed to load";
-if(loadConfig===false) throw "cofig failed to load";
 if(config.http_accept_connect_on_hostname=="") throw "invalid http_accept_connect_on_hostname";
 if(config.http_port=="") throw "invalid http_port";
 if(config.irc_port=="") throw "invalid irc_port";
@@ -60,13 +53,14 @@ http.createServer(function(req,res)
     var requestType = 0;
     var url = req.url;
 
-    if(url=="/")requestType=1;
-    if(url=="/status")requestType=2;
-    if(url=="/img01.png") requestType=3;
-    if(url=="/img02.png") requestType=4;
-    if(url=="/load.gif") requestType=5;
-    if(url=="/img04.png") requestType=6;
-    if(url=="/status_period")requestType=7;
+    if(url=="/") requestType=1;
+    else if(url=="/status") requestType=2;
+    else if(url=="/img01.png") requestType=3;
+    else if(url=="/img02.png") requestType=4;
+    else if(url=="/load.gif") requestType=5;
+    else if(url=="/img04.png") requestType=6;
+    else if(url=="/status_period")requestType=7;
+    else requestType = -1;
 
     console.log(url);
 
@@ -112,14 +106,14 @@ http.createServer(function(req,res)
         res.end(getStatusPeriod());
     }
 
-
+    if(requestType==0 || requestType==-1)
+    {
+        res.writeHead(200,{'Content-Type':'text/plain'});
+        res.end("invalid request");
+    }
 
 
 }).listen(config.http_port,config.http_accept_connect_on_hostname);
 
-if(true)
-{
-    irc = new Irc(config);
-}
+irc = new Irc(config);
 
-},2000);
