@@ -36,16 +36,19 @@
                 var j = eval("("+data+")");
                 var trHtml = "";
                 var viHtml = "";
+                var bHtml = "";
                 for(var i=0; i<j.length; i++)
                 {
-                    var value= j[i];
+                    var value= j[i][0];
+                    var d= j[i][1];
                     trHtml += '<td class="'+( value == 1 ? 'online' : 'offline')+'"></td>';
-                    viHtml += "<td></td>";
+                    viHtml += "<td>"+( d==1 ? 'O' : '')+"</td>";
+                    bHtml += "<td></td>";
                 }
 
                 $("#visit").html(viHtml);
                 $("#is_online").html(trHtml);
-                $("#border").html(viHtml);
+                $("#border").html(bHtml);
             })},1000);
         </script>
 

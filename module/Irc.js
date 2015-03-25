@@ -34,13 +34,21 @@ module.exports = function Irc(core)
             if(parameters[1]=="303")
             {
                 online = ( parameters[3] == ":"+config.user_irc_nickname );
-                onlineData.push(online ? 1 : -1);
+                var o = new Object();
+                o.online = ( online ? 1 : -1 );
+                onlineData.push(o);
             }
         }
     });
     irc.write("NICK "+config.check_online_nickname+"\r\n");
     irc.write("USER "+config.check_online_nickname+" 0 * :"+config.chech_online_nickname+"\r\n");
     setInterval(function(){ irc.write("ISON "+config.user_irc_nickname+"\r\n");},15000);
+
+    this.knockOnDoor = function()
+    {
+        if(onlineData.length==0) return;
+        onlineData[onlineData.length-1].knockedDoor = true;
+    }
 
     this.getData = function()
     {

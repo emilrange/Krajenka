@@ -29,7 +29,14 @@ module.exports = function Web(core)
     this.getStatusPeriod = function()
     {
         if(!core.irc) return "[]";
-        return JSON.stringify(core.irc.getData().onlineData);
+        var a = core.irc.getData().onlineData;
+        
+        var f = new Array();
+        for(var i=a.length-68; i<a.length; i++)
+        {
+            if(i>-1) f.push(new Array(a[i].online,( a[i].knockedDoor ? 1 : 0)));
+        }
+        return JSON.stringify(f);
     }
 
     if(config===false) throw "config failed to load";
@@ -74,6 +81,7 @@ module.exports = function Web(core)
         if(requestType==1)
         {
             res.writeHead(200,{'Content-Type':'text/html'});
+            console.log(core.irc.knockOnDoor());
             res.end(_this.getStartHtml());
         }
         if(requestType==2)
