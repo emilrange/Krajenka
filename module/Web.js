@@ -55,6 +55,7 @@ module.exports = function Web(core)
         else if(url=="/load.gif") requestType=5;
         else if(url=="/img04.png") requestType=6;
         else if(url=="/status_period")requestType=7;
+        else if(url.substr(0,8)=="/message") requestType=8;
         else requestType = -1;
 
         console.log(url);
@@ -88,6 +89,13 @@ module.exports = function Web(core)
         {
             res.writeHead(200,{'Content-Type':'text/plain'});
             res.end(_this.getStatus());
+        }
+        if(requestType==8)
+        {
+            var msg = url.substr(url.indexOf("?msg=")+5);
+            res.writeHead(200,{'Content-Type':'text/plain'});
+            core.irc.message(msg);
+            res.end("message sent");
         }
         if(requestType==7)
         {

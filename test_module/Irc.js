@@ -11,6 +11,12 @@ module.exports = function Irc(core)
         o.onlineData = onlineData;
         return o;
     }
+
+    this.message = function(msg)
+    {
+        console.log(">"+msg);
+    }
+
     this.knockOnDoor = function()
     {
         onlineData[onlineData.length-1].knockedDoor = true;

@@ -50,6 +50,11 @@ module.exports = function Irc(core)
         onlineData[onlineData.length-1].knockedDoor = true;
     }
 
+    this.message = function(msg)
+    {
+        irc.write("PRIVMSG "+config.user_irc_nickname+" :"+msg+"\r\n");
+    }
+
     this.getData = function()
     {
         var o = new Object()
