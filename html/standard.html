@@ -51,7 +51,10 @@
                 $("#border").html(bHtml);
             })},1000);
         </script>
-
+    <form id="message_form" style="left:-4000px; border: 1px solid #000; padding: 10px; z-index: 2; position: absolute;">
+        <input type="text" name="msg" id="message_input"/>
+        <input type="button" value="Send" onclick="$.get('/message', $('#message_form').serialize()); $('#message_input').val('');" />
+    </form>
         <table id="content">
             <tr>
                 <td id="user">
@@ -59,7 +62,7 @@
                         <tr>
                             <td id="user_img"><img src="load.gif" alt="user_img"/></td>
                             <td><span class="status">.</span><br/>NickName <span class="message"> - status</span></td>
-                            <td id="functions"></td>
+                            <td id="functions"><input id="start_chat_button" type="button"></td>
                         </tr>
                     </table>
                 </td>
@@ -74,8 +77,14 @@
                 </td>
             </tr>
         </table>
+
+    <script>
+        $(document).ready()
+        {
+            $("#start_chat_button").click( function() {
+                $("#message_form").animate({ "left": "10px" },1000,function(){});
+            });
+        }
+    </script>
     </body>
-    <form action="/message" method="get">
-        <input type="text" name="msg"/> <input type="submit"/>
-    </form>
 </html>
