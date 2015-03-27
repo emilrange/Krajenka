@@ -50,6 +50,17 @@
                 $("#is_online").html(trHtml);
                 $("#border").html(bHtml);
             })},1000);
+
+            setInterval(function(){$.ajax({url:"/get_message"}).done(function(data){
+                var j = eval( "("+ data +")" );
+                if(j.length>0)
+                {
+                    var msg = j[0];
+                    alert(msg); // just temponary. will put out message in html later
+                }
+            })},3000);
+
+
         </script>
     <form id="message_form" style="left:-4000px; border: 1px solid #000; padding: 10px; z-index: 2; position: absolute;">
         <input type="text" name="msg" id="message_input"/>

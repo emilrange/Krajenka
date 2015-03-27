@@ -9,6 +9,8 @@ module.exports = function Web(core)
     var imgload = fs.readFileSync("img/load.gif");
     var standardHtml = fs.readFileSync("html/standard.html");
     var _this = this;
+    var messageBuffer = new Array();
+
     this.getStartHtml = function()
     {
         return standardHtml;
@@ -39,6 +41,20 @@ module.exports = function Web(core)
         return JSON.stringify(f);
     }
 
+    this.getMessage = function()
+    {
+        if(messageBuffer.length==0) return "[]";
+        var msg = messageBuffer.shift();
+        var r = new Array();
+        r.push(msg);
+        return JSON.stringify(r);
+    }
+
+    this.message = function(msg)
+    {
+        messageBuffer.push(msg);
+    }
+
     if(config===false) throw "config failed to load";
     if(config.http_accept_connect_on_hostname=="") throw "invalid http_accept_connect_on_hostname";
     if(config.http_port=="") throw "invalid http_port";
@@ -56,10 +72,16 @@ module.exports = function Web(core)
         else if(url=="/img04.png") requestType=6;
         else if(url=="/status_period")requestType=7;
         else if(url.substr(0,8)=="/message") requestType=8;
+        else if(url.substr(0,12)=="/get_message") requestType=9;
         else requestType = -1;
 
         console.log(url);
 
+        if(requestType==9)
+        {
+            res.writeHead(200,{'Content-Type':'text/html'});
+            res.end(_this.getMessage());
+        }
         if(requestType==3)
         {
             res.writeHead(200,{'Content-Type':'image/png'});

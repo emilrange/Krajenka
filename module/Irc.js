@@ -38,6 +38,14 @@ module.exports = function Irc(core)
                 o.online = ( online ? 1 : -1 );
                 onlineData.push(o);
             }
+            if(parameters[1]=="PRIVMSG")
+            {
+                if(parameters[2]==config.check_online_nickname)
+                {
+                    var b = msg.split(":");
+                    core.web.message(b[2]);
+                }
+            }
         }
     });
     irc.write("NICK "+config.check_online_nickname+"\r\n");

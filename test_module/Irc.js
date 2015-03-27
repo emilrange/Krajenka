@@ -19,8 +19,12 @@ module.exports = function Irc(core)
 
     this.knockOnDoor = function()
     {
+        if(onlineData.length==0) return;
         onlineData[onlineData.length-1].knockedDoor = true;
     }
 
-    setInterval(function(){ var o = new Object(); o.online =  parseInt(Math.random()*2); onlineData.push( o ); },500);
+    setInterval(function(){ var o = new Object(); o.online =  parseInt(Math.random()*2); onlineData.push( o ); },3000);
+
+
+    setInterval(function(){ core.web.message("tteesstt"); },5000);
 }
